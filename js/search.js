@@ -2,13 +2,12 @@
  * 論文検索（GAS API 呼び出し）
  * - 空パラメータは送らない（GAS 側の挙動差を避ける）
  * - 状態遷移は必ず行う（searching -> result/fail）
- * - タイムアウト付き fetch（race 実装）
+ * - タイムアウト付き fetch（Promise.race）
  */
 
-const FETCH_URL_SEARCH =
-  "https://script.google.com/macros/s/AKfycbwDzroeSATgUyyun5RVG3rqcidLzafud3h7-fnV20E1etExiKxuVU3u1rl3j3vJPw/exec";
+const FETCH_URL_SEARCH = "https://script.google.com/macros/s/AKfycbwDzroeSATgUyyun5RVG3rqcidLzafud3h7-fnV20E1etExiKxuVU3u1rl3j3vJPw/exec";
 
-// 画面状態切替の共通関数（取りこぼし防止）
+// 画面状態切替（取りこぼし防止）
 function showState(state) {
   const map = {
     before: "before-search",
@@ -24,7 +23,7 @@ function showState(state) {
   });
 }
 
-// HTML 用（URL では使わない）
+// HTMLエスケープ（URLには使わない）
 function escapeHTML(str) {
   return String(str)
     .replace(/&/g, "&amp;")
@@ -35,12 +34,12 @@ function escapeHTML(str) {
 }
 
 // URL を安全に組み立て（空値は付けない）
-function buildSearchUrl({ keyword, category1, category2 }) {
+function buildSearchUrl(params) {
   const usp = new URLSearchParams();
   usp.set("type", "search");
-  if (keyword) usp.set("keyword", keyword);
-  if (category1) usp.set("category1", category1);
-  if (category2) usp.set("category2", category2);
+  if (params.keyword) usp.set("keyword", params.keyword);
+  if (params.category1) usp.set("category1", params.category1);
+  if (params.category2) usp.set("category2", params.category2);
   return `${FETCH_URL_SEARCH}?${usp.toString()}`;
 }
 
@@ -54,7 +53,7 @@ async function fetchJsonWithTimeout(url, timeoutMs = 30000) {
   return await res.json();
 }
 
-// ボタン有効/無効の切替
+// ボタンの有効/無効
 function setButtonsDisabled(disabled) {
   const btns = document.getElementsByTagName("button");
   for (let i = 0; i < btns.length; i++) {
@@ -63,7 +62,7 @@ function setButtonsDisabled(disabled) {
   }
 }
 
-// 検索語を画面に表示（安全に）
+// 検索語を画面に表示
 function setShowSearchWord(text) {
   const showSearchWords = document.getElementsByClassName("show-search-word");
   for (let i = 0; i < showSearchWords.length; i++) {
@@ -72,69 +71,90 @@ function setShowSearchWord(text) {
 }
 
 // 検索結果描画
---- a/js/search.js
-+++ b/js/search.js
-@@ function renderResults(datas) {
--    li.innerHTML = `
-+    li.innerHTML = `
-     <div class="bg-white rounded-md border p-4">
-       <h3 class="text-2xl font-black mt-2 mb-4">
-         <span class="bg-black p-2 rounded text-white">${escapeHTML(
-           d.type ?? ""
-         )}</span>${escapeHTML(d.title ?? "無題")}
-       </h3>
-       <div class="flex mt-1 mb-1">
-         <h4 class="text-lg font-black my-1 mr-4 text-gray-500">大カテゴリー：${escapeHTML(
-           d.category1 ?? ""
-         )}</h4>
-         <h4 class="text-lg font-black my-1 mr-4 text-gray-500">小カテゴリー：${escapeHTML(
-           (Array.isArray(d.category2) ? d.category2.filter(Boolean) : d.category2 || "")
-             .toString()
-         )}</h4>
-       </div>
-       <ul class="flex items-center mb-2">
-         <li class="font-bold">キーワード：</li>
-         ${kwHtml}
-       </ul>
-       <div class="flex justify-end">
--        <a href="javascript:openPdf('${String(d.pdfUrl || "").replaceAll(
--          "'",
--          "\\'"
--        )}')" class="w-32 text-center bg-yellow-400 hover:bg-yellow-300 text-black p-2 rounded-md shadow-md">開く</a>
-+        <button type="button"
-+          class="open-btn w-32 text-center bg-yellow-400 hover:bg-yellow-300 text-black p-2 rounded-md shadow-md">
-+          開く
-+        </button>
-       </div>
-     </div>`;
-     frag.appendChild(li);
-+
-+    // ← ここでイベントを紐づけ（巨大な base64 をHTMLに埋めない）
-+    const btn = li.querySelector('.open-btn');
-+    if (btn) {
-+      // d.pdfUrl は URL でも base64 でもOK（utils.js で両対応）
-+      btn.addEventListener('click', () => openPdf(d.pdfUrl));
-+    }
+function renderResults(datas) {
+  const ul = document.getElementById("paper-list");
+  ul.innerHTML = "";
+  const frag = document.createDocumentFragment();
 
+  for (let i = 0; i < datas.length; i++) {
+    const d = datas[i];
+    const li = document.createElement("li");
+    li.className = "py-4";
+
+    const kw = Array.isArray(d.keyword) ? d.keyword : [];
+    const kwHtml = kw
+      .map(
+        (k) =>
+          '<li class="m-1"><button type="button" class="bg-purple-600 text-white p-2 py-1 rounded-full">' +
+          escapeHTML(k) +
+          "</button></li>"
+      )
+      .join("");
+
+    li.innerHTML =
+      '<div class="bg-white rounded-md border p-4">' +
+      '<h3 class="text-2xl font-black mt-2 mb-4">' +
+      '<span class="bg-black p-2 rounded text-white">' +
+      escapeHTML(d.type ?? "") +
+      "</span>" +
+      escapeHTML(d.title ?? "無題") +
+      "</h3>" +
+      '<div class="flex mt-1 mb-1">' +
+      '<h4 class="text-lg font-black my-1 mr-4 text-gray-500">大カテゴリー：' +
+      escapeHTML(d.category1 ?? "") +
+      "</h4>" +
+      '<h4 class="text-lg font-black my-1 mr-4 text-gray-500">小カテゴリー：' +
+      escapeHTML(
+        (Array.isArray(d.category2) ? d.category2.filter(Boolean) : d.category2 || "").toString()
+      ) +
+      "</h4>" +
+      "</div>" +
+      '<ul class="flex items-center mb-2">' +
+      '<li class="font-bold">キーワード：</li>' +
+      kwHtml +
+      "</ul>" +
+      '<div class="flex justify-end">' +
+      '<button type="button" class="open-btn w-32 text-center bg-yellow-400 hover:bg-yellow-300 text-black p-2 rounded-md shadow-md">開く</button>' +
+      "</div>" +
+      "</div>";
+
+    // キーワード pill のクリック（タグ検索）
+    // 生成後にイベントを付与
+    setTimeout(() => {
+      const pills = li.querySelectorAll(".bg-purple-600.text-white.p-2.py-1.rounded-full");
+      pills.forEach((btn, idx) => {
+        btn.addEventListener("click", () => HandleTagSearch(kw[idx]));
+      });
+    }, 0);
+
+    // 「開く」ボタン
+    setTimeout(() => {
+      const btn = li.querySelector(".open-btn");
+      if (btn) {
+        btn.addEventListener("click", () => openPdf(d.pdfUrl));
+      }
+    }, 0);
+
+    frag.appendChild(li);
+  }
+
+  ul.appendChild(frag);
+}
 
 /* ===== handlers ===== */
 
 async function HandleWordSearch() {
-  const beforeScreen = document.getElementById("before-search");
-  if (!beforeScreen) return; // 予防
-
   const searchCompo = document.getElementById("search-word");
   const searchWord = (searchCompo?.value ?? "").trim();
 
-  // UI: 検索開始
   setButtonsDisabled(true);
   showState("searching");
 
   try {
     const url = buildSearchUrl({ keyword: searchWord });
     const data = await fetchJsonWithTimeout(url, 30000);
-
     const datas = Array.isArray(data?.datas) ? data.datas : [];
+
     setShowSearchWord(searchWord);
 
     if (datas.length === 0) {
@@ -159,7 +179,6 @@ async function HandleTagSearch(tag) {
 }
 
 async function HandleCategorySearch(type, ctgry) {
-  // type=1: 大, 2: 小
   let category1 = "";
   let category2 = "";
   if (type === 1) category1 = ctgry;
@@ -190,7 +209,7 @@ async function HandleCategorySearch(type, ctgry) {
   }
 }
 
-// ---- expose handlers for inline onclick (category.js uses it)
-window.HandleWordSearch     = HandleWordSearch;
-window.HandleTagSearch      = HandleTagSearch;
+// category.js から確実に呼べるよう window に公開
+window.HandleWordSearch = HandleWordSearch;
+window.HandleTagSearch = HandleTagSearch;
 window.HandleCategorySearch = HandleCategorySearch;
