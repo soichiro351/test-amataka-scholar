@@ -1,80 +1,109 @@
 /**
  * Google Spreadsheetからカテゴリー一覧を取得する。
+ * （inline onclick を使わず、addEventListener で確実に発火させる）
  */
 
-const FETCH_URL_CATEGORY = "https://script.google.com/macros/s/AKfycbwDzroeSATgUyyun5RVG3rqcidLzafud3h7-fnV20E1etExiKxuVU3u1rl3j3vJPw/exec";
+const FETCH_URL_CATEGORY =
+  "https://script.google.com/macros/s/AKfycbwDzroeSATgUyyun5RVG3rqcidLzafud3h7-fnV20E1etExiKxuVU3u1rl3j3vJPw/exec";
 
-// ダミーデータ
-const categories = [
-    {
-        category1: "文学",
-        category2: ["あ", "い", "う"]
-    },
-    {
-        category1: "理学",
-        category2: ["数学", "物理", "化学", "生物", "地学"]
-    },
-    {
-        category1: "工学",
-        category2: ["建築", "土木", "情報", "機械"]
-    },
-];
-
-function updateCategory(ctgry) {
-    const d = document.getElementById("category-list");
-    
-    // 子要素の全削除
-    while (d.firstChild) {
-        d.removeChild(d.firstChild);
-    }
-
-    // 要素を追加していく
-    for (let i = 0; i < ctgry.length; i++) {
-        var detail = document.createElement("details");
-        detail.className = "open:bg-purple-300 rounded open:shadow-md border-purple-600 p-1 my-1";
-
-        var summary = document.createElement("summary");
-        summary.className = "text-lg font-bold hover:bg-purple-300 p-1 rounded cursor-pointer";
-        summary.innerHTML = ctgry[i].category1;
-        detail.appendChild(summary);
-
-        var div = document.createElement("div");
-        div.className = "flex items-center";
-
-        var btnDiv = document.createElement("div");
-        var btn = document.createElement("button");
-        btn.className = "bg-purple-600 text-white px-8 py-1 rounded-full hover:bg-purple-500 m-2 text-2xl";
-        btn.setAttribute("onclick", `HandleCategorySearch(1, "${ctgry[i].category1}")`)
-        btn.innerHTML = ctgry[i].category1;
-        btnDiv.appendChild(btn);
-        div.appendChild(btnDiv);
-
-        var ul = document.createElement("ul");
-        ul.className = "ml-4";
-        for (let j = 0; j < ctgry[i].category2.length; j++) {
-            var li = document.createElement("li");
-            var sBtn = document.createElement("button");
-            sBtn.className = "bg-purple-600 text-white px-8 py-1 rounded-full hover:bg-purple-500 m-1 cursor-pointer";
-            sBtn.setAttribute("onclick", `HandleCategorySearch(2, "${ctgry[i].category2[j]}")`)
-            sBtn.innerHTML = ctgry[i].category2[j];
-            li.appendChild(sBtn);
-            ul.appendChild(li);
-        }
-        div.appendChild(ul);
-
-        detail.appendChild(div);
-
-        d.appendChild(detail);
-    }
+// --- DOM utils
+function el(tag, props = {}, ...children) {
+  const e = document.createElement(tag);
+  Object.entries(props).forEach(([k, v]) => {
+    if (k === "className") e.className = v;
+    else if (k === "text") e.textContent = v;
+    else if (k.startsWith("data-")) e.setAttribute(k, v);
+    else e.setAttribute(k, v);
+  });
+  for (const c of children) e.appendChild(c);
+  return e;
 }
 
-async function getCategories() {
-    const url = FETCH_URL_CATEGORY + `?type=category`;
-    const fetchs = await fetch(url)
-        .then(res => res.json())
-        .then(data => {
-            return data;
-        });
+export async function getCategories() {
+  const url = FETCH_URL_CATEGORY + `?type=category`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+  return await res.json(); // 返り値は配列を想定（必要なら .datas に合わせてください）
+}
 
-    return fetchs;
+export function updateCategory(ctgry) {
+  const d = document.getElementById("category-list");
+  if (!d) return;
+
+  // クリア
+  while (d.firstChild) d.removeChild(d.firstChild);
+
+  const frag = document.createDocumentFragment();
+
+  for (let i = 0; i < ctgry.length; i++) {
+    const c1 = ctgry[i].category1;
+    const c2s = Array.isArray(ctgry[i].category2) ? ctgry[i].category2 : [];
+
+    const detail = el(
+      "details",
+      { className: "open:bg-purple-300 rounded open:shadow-md border-purple-600 p-1 my-1" }
+    );
+
+    const summary = el("summary", {
+      className: "text-lg font-bold hover:bg-purple-300 p-1 rounded cursor-pointer",
+      text: c1,
+      role: "button",
+      "aria-label": c1
+    });
+    detail.appendChild(summary);
+
+    const div = el("div", { className: "flex items-center" });
+
+    // 大カテゴリーのボタン（イベントで関数を呼ぶ）
+    const btnDiv = el("div");
+    const btn = el("button", {
+      className: "bg-purple-600 text-white px-8 py-1 rounded-full hover:bg-purple-500 m-2 text-2xl",
+      type: "button",
+      "data-type": "1",
+      "data-name": c1,
+      "aria-label": c1
+    });
+    btn.textContent = c1;
+    btn.addEventListener("click", () => {
+      // window.* を直接参照せず、存在チェックしてから呼ぶ
+      if (typeof window.HandleCategorySearch === "function") {
+        window.HandleCategorySearch(1, c1);
+      } else {
+        console.error("HandleCategorySearch is not available.");
+      }
+    });
+    btnDiv.appendChild(btn);
+    div.appendChild(btnDiv);
+
+    // 小カテゴリーのボタン群
+    const ul = el("ul", { className: "ml-4" });
+    for (let j = 0; j < c2s.length; j++) {
+      const name = c2s[j];
+      const li = el("li");
+      const sBtn = el("button", {
+        className:
+          "bg-purple-600 text-white px-8 py-1 rounded-full hover:bg-purple-500 m-1 cursor-pointer",
+        type: "button",
+        "data-type": "2",
+        "data-name": name,
+        "aria-label": name
+      });
+      sBtn.textContent = name;
+      sBtn.addEventListener("click", () => {
+        if (typeof window.HandleCategorySearch === "function") {
+          window.HandleCategorySearch(2, name);
+        } else {
+          console.error("HandleCategorySearch is not available.");
+        }
+      });
+      li.appendChild(sBtn);
+      ul.appendChild(li);
+    }
+    div.appendChild(ul);
+
+    detail.appendChild(div);
+    frag.appendChild(detail);
+  }
+
+  d.appendChild(frag);
 }
