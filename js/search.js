@@ -72,61 +72,50 @@ function setShowSearchWord(text) {
 }
 
 // 検索結果描画
-function renderResults(datas) {
-  const ul = document.getElementById("paper-list");
-  ul.innerHTML = "";
-  const frag = document.createDocumentFragment();
+--- a/js/search.js
++++ b/js/search.js
+@@ function renderResults(datas) {
+-    li.innerHTML = `
++    li.innerHTML = `
+     <div class="bg-white rounded-md border p-4">
+       <h3 class="text-2xl font-black mt-2 mb-4">
+         <span class="bg-black p-2 rounded text-white">${escapeHTML(
+           d.type ?? ""
+         )}</span>${escapeHTML(d.title ?? "無題")}
+       </h3>
+       <div class="flex mt-1 mb-1">
+         <h4 class="text-lg font-black my-1 mr-4 text-gray-500">大カテゴリー：${escapeHTML(
+           d.category1 ?? ""
+         )}</h4>
+         <h4 class="text-lg font-black my-1 mr-4 text-gray-500">小カテゴリー：${escapeHTML(
+           (Array.isArray(d.category2) ? d.category2.filter(Boolean) : d.category2 || "")
+             .toString()
+         )}</h4>
+       </div>
+       <ul class="flex items-center mb-2">
+         <li class="font-bold">キーワード：</li>
+         ${kwHtml}
+       </ul>
+       <div class="flex justify-end">
+-        <a href="javascript:openPdf('${String(d.pdfUrl || "").replaceAll(
+-          "'",
+-          "\\'"
+-        )}')" class="w-32 text-center bg-yellow-400 hover:bg-yellow-300 text-black p-2 rounded-md shadow-md">開く</a>
++        <button type="button"
++          class="open-btn w-32 text-center bg-yellow-400 hover:bg-yellow-300 text-black p-2 rounded-md shadow-md">
++          開く
++        </button>
+       </div>
+     </div>`;
+     frag.appendChild(li);
++
++    // ← ここでイベントを紐づけ（巨大な base64 をHTMLに埋めない）
++    const btn = li.querySelector('.open-btn');
++    if (btn) {
++      // d.pdfUrl は URL でも base64 でもOK（utils.js で両対応）
++      btn.addEventListener('click', () => openPdf(d.pdfUrl));
++    }
 
-  for (let i = 0; i < datas.length; i++) {
-    const d = datas[i];
-    const li = document.createElement("li");
-    li.className = "py-4";
-
-    // キーワード pills
-    const kw = Array.isArray(d.keyword) ? d.keyword : [];
-    const kwHtml = kw
-      .map(
-        (k) =>
-          `<li class="m-1"><button onclick="HandleTagSearch('${escapeHTML(
-            k
-          )}')" class="bg-purple-600 text-white p-2 py-1 rounded-full">${escapeHTML(
-            k
-          )}</button></li>`
-      )
-      .join("");
-
-    li.innerHTML = `
-    <div class="bg-white rounded-md border p-4">
-      <h3 class="text-2xl font-black mt-2 mb-4">
-        <span class="bg-black p-2 rounded text-white">${escapeHTML(
-          d.type ?? ""
-        )}</span>${escapeHTML(d.title ?? "無題")}
-      </h3>
-      <div class="flex mt-1 mb-1">
-        <h4 class="text-lg font-black my-1 mr-4 text-gray-500">大カテゴリー：${escapeHTML(
-          d.category1 ?? ""
-        )}</h4>
-        <h4 class="text-lg font-black my-1 mr-4 text-gray-500">小カテゴリー：${escapeHTML(
-          (Array.isArray(d.category2) ? d.category2.filter(Boolean) : d.category2 || "")
-            .toString()
-        )}</h4>
-      </div>
-      <ul class="flex items-center mb-2">
-        <li class="font-bold">キーワード：</li>
-        ${kwHtml}
-      </ul>
-      <div class="flex justify-end">
-        <a href="javascript:openPdf('${String(d.pdfUrl || "").replaceAll(
-          "'",
-          "\\'"
-        )}')" class="w-32 text-center bg-yellow-400 hover:bg-yellow-300 text-black p-2 rounded-md shadow-md">開く</a>
-      </div>
-    </div>`;
-    frag.appendChild(li);
-  }
-
-  ul.appendChild(frag);
-}
 
 /* ===== handlers ===== */
 
