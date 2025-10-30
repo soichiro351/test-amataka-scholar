@@ -1,16 +1,12 @@
-/**
- * base64からpdfを別タブで開く
- * @param {*} base64str 
- */
-function openPdf(base64str) {
-    const str = String(base64str).split("data:application/pdf;base64,")[1];
-    var byteCharacters = atob(str);
-    var byteNumbers = new Array(byteCharacters.length);
-    for (var i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-    var byteArray = new Uint8Array(byteNumbers);
-    var file = new Blob([byteArray], { type: 'application/pdf;base64' });
-    var fileURL = URL.createObjectURL(file);
-    window.open(fileURL);
-}
+--- a/js/utils.js
++++ b/js/utils.js
+ function openPdf(base64str) {
+-    const str = String(base64str).split("data:application/pdf;base64,")[1];
++    // もしURLが来たらそのまま開く
++    if (/^https?:\/\//i.test(base64str)) {
++      window.open(base64str, '_blank', 'noopener');
++      return;
++    }
++    const str = String(base64str).split("data:application/pdf;base64,")[1];
+     var byteCharacters = atob(str);
+     var byteNumbers = new Array(byteCharacters.length);
