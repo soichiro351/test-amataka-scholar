@@ -189,3 +189,8 @@ async function HandleCategorySearch(type, ctgry) {
     setButtonsDisabled(false);
   }
 }
+
+// ---- expose handlers for inline onclick (category.js uses it)
+window.HandleWordSearch     = HandleWordSearch;
+window.HandleTagSearch      = HandleTagSearch;
+window.HandleCategorySearch = HandleCategorySearch;
