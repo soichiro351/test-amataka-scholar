@@ -1,11 +1,10 @@
 /**
  * Google Spreadsheetからカテゴリー一覧を取得する。
- * inline onclick をやめ、addEventListener で確実に発火させる。
- * （モジュール記法は使わない：export/import なし）
+ * inline onclick を使わず、addEventListener で確実に発火させる。
+ * モジュール記法は使わない（export/import なし）。
  */
 
-const FETCH_URL_CATEGORY =
-  "https://script.google.com/macros/s/AKfycbwDzroeSATgUyyun5RVG3rqcidLzafud3h7-fnV20E1etExiKxuVU3u1rl3j3vJPw/exec";
+const FETCH_URL_CATEGORY = "https://script.google.com/macros/s/AKfycbwDzroeSATgUyyun5RVG3rqcidLzafud3h7-fnV20E1etExiKxuVU3u1rl3j3vJPw/exec";
 
 // DOMユーティリティ（最小）
 function _el(tag, props = {}, ...children) {
@@ -19,20 +18,42 @@ function _el(tag, props = {}, ...children) {
   return e;
 }
 
-// 既存 index.html と互換：await getCategories() → updateCategory(...)
+// 返却形が配列でも {datas:[...]} でも配列を返す
 async function getCategories() {
-  const url = FETCH_URL_CATEGORY + `?type=category`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
-  // 既存実装は配列をそのまま返している想定（必要なら .datas に合わせる）
-  return await res.json();
+  const url = FETCH_URL_CATEGORY + "?type=category";
+  try {
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) throw new Error(res.status + " " + res.statusText);
+    const data = await res.json();
+    const arr = Array.isArray(data)
+      ? data
+      : Array.isArray(data.datas)
+      ? data.datas
+      : Array.isArray(data.data)
+      ? data.data
+      : Array.isArray(data.items)
+      ? data.items
+      : Array.isArray(data.category)
+      ? data.category
+      : [];
+    if (!Array.isArray(arr) || arr.length === 0) {
+      console.warn("getCategories: empty or unknown payload shape:", data);
+    }
+    return arr;
+  } catch (e) {
+    console.error("getCategories failed:", e);
+    const d = document.getElementById("category-list");
+    if (d) {
+      d.innerHTML = '<div class="text-sm text-gray-600 p-2">カテゴリの取得に失敗しました。</div>';
+    }
+    return [];
+  }
 }
 
 function updateCategory(ctgry) {
   const wrap = document.getElementById("category-list");
   if (!wrap) return;
 
-  // リセット
   while (wrap.firstChild) wrap.removeChild(wrap.firstChild);
 
   const frag = document.createDocumentFragment();
@@ -42,13 +63,11 @@ function updateCategory(ctgry) {
     const c2s = Array.isArray(ctgry[i].category2) ? ctgry[i].category2 : [];
 
     const detail = _el("details", {
-      className:
-        "open:bg-purple-300 rounded open:shadow-md border-purple-600 p-1 my-1",
+      className: "open:bg-purple-300 rounded open:shadow-md border-purple-600 p-1 my-1",
     });
 
     const summary = _el("summary", {
-      className:
-        "text-lg font-bold hover:bg-purple-300 p-1 rounded cursor-pointer",
+      className: "text-lg font-bold hover:bg-purple-300 p-1 rounded cursor-pointer",
       text: c1,
       role: "button",
       "aria-label": c1,
@@ -65,7 +84,7 @@ function updateCategory(ctgry) {
       "aria-label": c1,
     });
     bigBtn.textContent = c1;
-    bigBtn.addEventListener("click", () => {
+    bigBtn.addEventListener("click", function () {
       if (typeof window.HandleCategorySearch === "function") {
         window.HandleCategorySearch(1, c1);
       } else {
@@ -89,7 +108,7 @@ function updateCategory(ctgry) {
         "aria-label": name,
       });
       sBtn.textContent = name;
-      sBtn.addEventListener("click", () => {
+      sBtn.addEventListener("click", function () {
         if (typeof window.HandleCategorySearch === "function") {
           window.HandleCategorySearch(2, name);
         } else {
