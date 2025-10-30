@@ -1,30 +1,66 @@
+/**
+ * 新しいタブでPDFを開く（ポップアップ警告を回避）
+ * 仕組み:
+ * 1) クリック直後に空タブ(about:blank)を開く → ここが「ユーザー操作」扱い
+ * 2) base64/data:URL/直URL を判定し、Blob URL を生成
+ * 3) その空タブの location を PDF に差し替える
+ */
 function openPdf(input) {
+  // 1) クリック直後に空タブを作る（ここが重要）
+  const win = window.open("", "_blank", "noopener"); // ここで確保できれば警告は出ない
+  // win が null の場合でも、後続でアンカーの擬似クリックにフォールバックする
+
   try {
-    // 1) URL ならそのまま
+    // 直URL(https://...)なら即差し替え
     if (/^https?:\/\//i.test(input)) {
-      window.open(input, "_blank", "noopener");
+      if (win) {
+        win.location.href = input;
+      } else {
+        const a = document.createElement("a");
+        a.href = input;
+        a.target = "_blank";
+        a.rel = "noopener";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      }
       return;
     }
-    // 2) data:URL or 生 base64
+
+    // data:URL or 生base64
     let b64 = String(input || "");
     const m = b64.match(/^data:application\/pdf;base64,(.*)$/i);
     if (m) b64 = m[1];
     b64 = b64.replace(/\s+/g, "");
 
-    const byteCharacters = atob(b64);
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-    const byteArray = new Uint8Array(byteNumbers);
-    const file = new Blob([byteArray], { type: "application/pdf" });
-    const fileURL = URL.createObjectURL(file);
+    // base64 → Blob (同期処理なのでユーザー操作の呼び出しスタック内で完了)
+    const byteChars = atob(b64);
+    const byteNums = new Array(byteChars.length);
+    for (let i = 0; i < byteChars.length; i++) byteNums[i] = byteChars.charCodeAt(i);
+    const blob = new Blob([new Uint8Array(byteNums)], { type: "application/pdf" });
+    const url = URL.createObjectURL(blob);
 
-    const w = window.open(fileURL, "_blank", "noopener");
-    setTimeout(() => URL.revokeObjectURL(fileURL), 30000);
-    if (!w) alert("ポップアップがブロックされました。ブラウザ設定で許可してください。");
-  } catch (e) {
-    console.error(e);
-    alert("PDFを開けませんでした。ファイル形式をご確認ください。");
+    // 2) 空タブにPDFを表示（ポップアップ扱いにならない）
+    if (win) {
+      win.location.href = url;
+    } else {
+      // 極まれに window.open がブロックされた場合のフォールバック（警告なし）
+      const a = document.createElement("a");
+      a.href = url;
+      a.target = "_blank";
+      a.rel = "noopener";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+
+    // 3) 後片付け（少し遅らせて解放）
+    setTimeout(() => URL.revokeObjectURL(url), 30000);
+  } catch (err) {
+    // 失敗時も警告ダイアログは出さず、コンソールにのみ記録
+    console.error("openPdf error:", err);
+    if (win && !win.closed) {
+      try { win.close(); } catch (_) { /* noop */ }
+    }
   }
 }
