@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- style tailwind css ver.3 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/amataka-scholar/favicon.ico">
+
+    <!-- CreateJSのライブラリー読み込み -->
+    <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+
+    <!-- ParticleJSのライブラリー読み込み -->
+    <script src="https://cdn.rawgit.com/ics-creative/ParticleJS/release/1.0.0/libs/particlejs.min.js"></script>
+    <script src="./js/bgAnime.js"></script>
+    
+    <title>Amataka Scholar</title>
+</head>
+<body class="overflow-x-hidden">
+    <section 
+        id="hero" 
+        class="min-h-screen w-screen relative bg-gradient-to-r from-blue-100 to-purple-200 overflow-hidden"
+    >
+        <div class="w-full absolute bottom-0"
+            style="z-index: 0;"
+        >
+            <canvas
+                id="bgCanvas"
+                height="514"
+                class="m-auto"
+            ></canvas>
+        </div>
+        <div class="relative max-w-screen-xl min-h-screen m-auto p-4 z-50">
+            <h1 class="text-6xl md:text-8xl text-purple-900 font-black py-8 lg:py-16">Amataka Scholar</h1>
+            <div class="w-full h-full grid grid-cols-1 md:grid-cols-5">
+                <div class="relative py-12 lg:py-6 md:order-2 md:col-span-3">
+                    <div class="m-auto md:relative right-0 w-[500px] md:w-[650px] lg:w-[800px]">
+                        <img src="./src/lp/window.png" class="shadow-xl" width="1280px">
+                    </div>
+                </div>
+                <div 
+                    class="h-full w-full flex flex-col justify-center items-center md:order-1 md:col-span-2 bg-center bg-cover"
+                    style="background-image: url(./src/white.png);"
+                >
+                    <p class="text-center my-6" >
+                        天草高校の先輩たちが<br>
+                        これまでに作成してきた<br>
+                        論文を検索する<br>
+                        ことができます。<br>
+                    </p>
+                    <a
+                        href="/amataka-scholar/"
+                        class="bg-purple-500 hover:py-8 hover:px-20 transition-all text-white py-6 px-16 rounded-md shadow-md text-xl"
+                    >
+                        開く
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section 
+        id="how-to-search" 
+        class="max-w-screen-xl m-auto p-4"
+    >
+        <h2 class="text-purple-400 text-3xl py-2 border-b-2 border-purple-400">投稿された論文の検索</h2>
+        <div class="sm:p-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 border-b border-blue-300">
+                <div 
+                    class="p-6"
+                >
+                    <h3 class="font-bold text-lg">キーワードで検索する</h3>
+                    <p class="mb-4">
+                        画面左側の検索ボックスに検索したい単語を
+                        入力して検索ボタンを押します。検索画面が
+                        表示され、検索が終了すると結果が表示され
+                        ます。
+                    </p>
+                    <p class="mb-4">
+                        開くボタンを押すと別タブで論文の PDF が
+                        開きます。
+                    </p>
+                </div>
+                <div class="p-6">
+                    <img src="./src/lp/search.png" class="shadow-lg" >
+                </div>
+            </div>
+
+            <div class="grid grid-flow-row-dense grid-cols-1 md:grid-cols-2 border-b border-blue-300">
+                <div class="p-6 md:order-2">
+                    <h3 class="font-bold text-lg">カテゴリで検索する</h3>
+                    <p class="mb-4">
+                        カテゴリのボタンを押すと検索画面が表示さ
+                        れ、検索が終了すると結果が表示されます。
+                        開くボタンを押すと別タブで論文の PDF が
+                        開きます。
+                        
+                    </p>
+                </div>
+                <div class="p-6 md:order-1">
+                    <img src="./src/lp/category.png" class="shadow-lg" >
+                </div>
+            </div>
+            <p class="text-right">
+                ※スマホなどの画面が小さいデバイスには対応していません
+            </p>
+        </div>
+    </section>
+
+    <section 
+        id="how-to-post" 
+        class="max-w-screen-xl m-auto p-4"
+    >
+        <h2 class="text-purple-400 text-3xl py-2 border-b-2 border-purple-400">論文の投稿</h2>
+        <div class="sm:p-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 border-b border-blue-300">
+                <div class="p-6">
+                    <h3 class="font-bold text-lg">タイトル</h3>
+                    <p class="mb-4">
+                        論文を専用のフォームを使って投稿することで
+                        検索サイトに登録することができます。
+                    </p>
+                    <p class="mb-4">
+                        まず、論文のタイトルを入力しましょう。
+                    </p>
+                </div>
+                <div class="p-6">
+                    <img src="./src/lp/post1.png" class="shadow-lg" >
+                </div>
+            </div>
+
+            <div class="grid grid-flow-row-dense grid-cols-1 md:grid-cols-2 border-b border-blue-300">
+                <div class="p-6 md:order-2">
+                    <h3 class="font-bold text-lg">キーワード</h3>
+                    <p class="mb-4">
+                        ここで入力したキーワードをもとに論文が検索さ
+                        れます。複数のキーワードを設定したい場合は、
+                        カンマで区切って入力してください。
+                    </p>
+                    <p class="mb-4">
+                        例)アマモ,有明海
+                    </p>
+                </div>
+                <div class="p-6 md:order-1">
+                    <img src="./src/lp/post2.png" class="shadow-lg" >
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 border-b border-blue-300">
+                <div class="p-6">
+                    <h3 class="font-bold text-lg">大カテゴリ</h3>
+                    <p class="mb-4">
+                        「理学」と「工学」おもにどちらに分類されるか設定してください。
+                    </p>
+                </div>
+                <div class="p-6">
+                    <img src="./src/lp/post3.png" class="shadow-lg" >
+                </div>
+            </div>
+            
+            <div class="grid grid-flow-row-dense grid-cols-1 md:grid-cols-2 border-b border-blue-300">
+                <div class="p-6 md:order-2">
+                    <h3 class="font-bold text-lg">小カテゴリ</h3>
+                    <p class="mb-4">
+                        大カテゴリで選択したものの中で、更に小カテゴリの分類を設定してください。
+                    </p>
+                </div>
+                <div class="p-6 md:order-1">
+                    <img src="./src/lp/post4.png" class="shadow-lg" >
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 border-b border-blue-300">
+                <div class="p-6">
+                    <h3 class="font-bold text-lg">ファイル添付</h3>
+                    <p class="mb-4">
+                        最後に作成した論文のPDFファイルを添付して「送信」を押します。
+                    </p>
+                </div>
+                <div class="p-6">
+                    <img src="./src/lp/post5.png" class="shadow-lg" >
+                </div>
+            </div>
+            <p class="text-right">
+                ※天草高校の生徒しか投稿できません。
+            </p>
+        </div>
+    </section>
+
+    <footer class="bg-purple-600 w-full flex items-center justify-center h-8 px-2 text-white">
+        <p>&copy; 2021 熊本県立天草高等学校　SSH研究部</p>
+    </footer>
+</body>
+</html>

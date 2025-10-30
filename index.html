@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- style tailwind css ver.3 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.12.313/build/pdf.min.js"></script>
+    <!-- favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/amataka-scholar/favicon.ico">
+
+    <title>Amataka Scholar</title>
+</head>
+<body class="bg-purple-50">
+    <!-- under 768px -->
+    <div class="md:hidden w-screen h-screen flex flex-col justify-center items-center">
+        <header class="fixed top-0 bg-purple-600 w-full flex flex-col items-center justify-between p-2 text-white">
+            <h1 class="text-3xl font-black">Amataka Scholar</h1>
+            <div>
+                <a href="https://sh.higo.ed.jp/amakusa/" target="_blank" rel="noopener noreferrer" class="hover:underline">天草高校ホームページ</a>
+            </div>
+        </header>
+        <p class="text-purple-600">
+            申し訳ありません。このサイズの画面には対応しておりません。
+        </p>
+    </div>
+    
+    <!-- over 768px -->
+    <div class="hidden md:block w-screen h-screen">
+        <header class="bg-purple-600 w-full flex items-center justify-between h-12 px-2 text-white">
+            <h1 class="text-3xl font-black flex">
+                <span>
+                    <svg height="100%" class="fill-current text-white w-10" style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="100%" xmlns:vectornator="http://vectornator.io" version="1.1" viewBox="0 0 1024 1024">
+                        <defs/>
+                        <g id="レイヤー 2" vectornator:layerName="レイヤー 2">
+                        <g opacity="1">
+                        <g opacity="1">
+                        <g opacity="1">
+                        <path stroke="currentColor" stroke-width="35.5957" d="M510.429+100.088L566.824+63.1903" fill="none" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
+                        <path stroke="currentColor" stroke-width="35.5957" d="M567.378+62.6869C567.378+62.6869+599.745+77.3294+632.731+123.239C665.717+169.15+664.542+164.972+674.704+207.759C684.867+250.546+675.714+289.605+675.714+289.605C675.714+289.605+666.899+306.207+658.713+321.138C650.528+336.068+640.637+354.109+640.637+354.109" fill="none" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
+                        </g>
+                        <g opacity="1">
+                        <path stroke="currentColor" stroke-width="35.5957" d="M512.278+100.088L455.884+63.1903" fill="none" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
+                        <path stroke="currentColor" stroke-width="35.5957" d="M455.329+62.6869C455.329+62.6869+422.962+77.3294+389.976+123.239C356.99+169.15+358.165+164.972+348.003+207.759C337.841+250.546+346.993+289.605+346.993+289.605C346.993+289.605+355.809+306.207+363.994+321.138C372.18+336.068+382.07+354.109+382.07+354.109" fill="none" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
+                        </g>
+                        </g>
+                        <g opacity="1">
+                        <g opacity="1">
+                        <path stroke="currentColor" stroke-width="35.5957" d="M97.4925+398.23L44.7351+440.164" fill="none" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
+                        <path stroke="currentColor" stroke-width="35.5957" d="M44.0828+440.532C44.0828+440.532+47.8062+475.861+81.0167+521.609C114.227+567.357+110.631+564.928+148.053+588.028C185.474+611.127+225.431+614.72+225.431+614.72C225.431+614.72+243.962+611.571+260.71+608.495C277.457+605.419+297.692+601.703+297.692+601.703" fill="none" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
+                        </g>
+                        <g opacity="1">
+                        <path stroke="currentColor" stroke-width="35.5957" d="M96.9111+399.985L79.6162+334.85" fill="none" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
+                        <path stroke="currentColor" stroke-width="35.5957" d="M79.3128+334.165C79.3128+334.165+103.389+308.043+157.342+291.165C211.295+274.286+206.961+274.089+250.772+277.895C294.584+281.7+328.785+302.67+328.785+302.67C328.785+302.67+341.774+316.258+353.373+328.723C364.973+341.188+378.989+356.248+378.989+356.248" fill="none" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
+                        </g>
+                        </g>
+                        <g opacity="1">
+                        <g opacity="1">
+                        <path stroke="currentColor" stroke-width="35.5957" d="M247.3+880.729L270.065+944.16" fill="none" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
+                        <path stroke="currentColor" stroke-width="35.5957" d="M270.204+944.896C270.204+944.896+304.857+952.719+358.848+935.963C412.84+919.207+409.384+921.832+443.28+893.814C477.176+865.795+493.412+829.11+493.412+829.11C493.412+829.11+496.384+810.55+498.85+793.702C501.316+776.854+504.297+756.498+504.297+756.498" fill="none" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
+                        </g>
+                        <g opacity="1">
+                        <path stroke="currentColor" stroke-width="35.5957" d="M248.775+881.844L181.536+877.299" fill="none" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
+                        <path stroke="currentColor" stroke-width="35.5957" d="M180.79+877.367C180.79+877.367+163.787+846.176+165.133+789.66C166.48+733.145+164.9+737.186+182.577+696.919C200.254+656.651+231.098+630.998+231.098+630.998C231.098+630.998+248.138+623.063+263.668+616.082C279.199+609.1+297.964+600.665+297.964+600.665" fill="none" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
+                        </g>
+                        </g>
+                        <g opacity="1">
+                        <g opacity="1">
+                        <path stroke="currentColor" stroke-width="35.5957" d="M921.896+397.777L974.653+439.711" fill="none" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
+                        <path stroke="currentColor" stroke-width="35.5957" d="M975.305+440.079C975.305+440.079+971.582+475.408+938.371+521.156C905.161+566.904+908.757+564.476+871.335+587.575C833.914+610.674+793.957+614.267+793.957+614.267C793.957+614.267+775.426+611.119+758.679+608.043C741.931+604.967+721.696+601.25+721.696+601.25" fill="none" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
+                        </g>
+                        <g opacity="1">
+                        <path stroke="currentColor" stroke-width="35.5957" d="M922.477+399.533L939.772+334.397" fill="none" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
+                        <path stroke="currentColor" stroke-width="35.5957" d="M940.075+333.712C940.075+333.712+915.999+307.591+862.046+290.712C808.093+273.834+812.427+273.636+768.616+277.442C724.804+281.248+690.603+302.217+690.603+302.217C690.603+302.217+677.615+315.805+666.015+328.27C654.415+340.735+640.399+355.796+640.399+355.796" fill="none" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
+                        </g>
+                        </g>
+                        <g opacity="1">
+                        <g opacity="1">
+                        <path stroke="currentColor" stroke-width="35.5957" d="M772.088+880.276L749.323+943.708" fill="none" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
+                        <path stroke="currentColor" stroke-width="35.5957" d="M749.184+944.444C749.184+944.444+714.531+952.266+660.54+935.51C606.549+918.755+610.004+921.38+576.108+893.361C542.212+865.343+525.976+828.658+525.976+828.658C525.976+828.658+523.005+810.097+520.538+793.249C518.072+776.401+515.091+756.045+515.091+756.045" fill="none" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
+                        </g>
+                        <g opacity="1">
+                        <path stroke="currentColor" stroke-width="35.5957" d="M770.613+881.391L837.852+876.847" fill="none" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
+                        <path stroke="currentColor" stroke-width="35.5957" d="M838.598+876.914C838.598+876.914+855.601+845.723+854.255+789.207C852.908+732.692+854.488+736.733+836.811+696.466C819.134+656.198+788.29+630.545+788.29+630.545C788.29+630.545+771.25+622.61+755.72+615.629C740.189+608.648+721.425+600.212+721.425+600.212" fill="none" stroke-linecap="round" opacity="1" stroke-linejoin="round"/>
+                        </g>
+                        </g>
+                        </g>
+                        </g>
+                        <g id="レイヤー 3" vectornator:layerName="レイヤー 3">
+                        <path d="M493.956+248.591C382.276+254.68+287.814+325.15+246.805+423.486L283.136+437.484C318.517+353.797+398.842+293.786+493.956+287.754L493.956+248.591ZM535.789+249.36L535.789+288.401C629.748+298.31+707.809+361.147+739.894+446.506L777.235+435.826C740.327+334.243+647.487+259.51+535.789+249.36ZM233.576+462.891C227.905+485.306+224.878+508.785+224.878+532.963C224.878+613.89+258.676+686.874+312.871+738.726L337.024+708.019C291.807+663.415+263.716+601.495+263.716+532.963C263.716+513.694+266.158+495.034+270.351+477.051L233.576+462.891ZM788.442+474.988L751.1+485.669C754.083+500.978+755.672+516.779+755.672+532.963C755.672+601.927+727.194+664.164+681.474+708.829L706.962+738.322C760.903+686.496+794.51+613.673+794.51+532.963C794.51+513.081+792.319+493.72+788.442+474.988ZM368.338+734.074L344.225+764.7C390.876+798.07+447.963+817.779+509.694+817.779C571.622+817.779+628.876+797.941+675.608+764.376L650.039+734.842C610.218+762.584+561.905+778.94+509.694+778.94C457.027+778.94+408.354+762.26+368.338+734.074Z" opacity="1" fill="currentColor"/>
+                        <path d="M492.459+307.072C405.01+313.679+331.444+369.819+299.804+447.538L328.285+459.473C355.247+392.847+417.837+344.472+492.459+337.94L492.459+307.072ZM534.251+307.557L534.251+338.749C607.014+347.874+667.333+396.9+692.599+463.235L722.416+455.103C693.388+375.65+621.276+316.938+534.251+307.557ZM287.748+487.509C284.777+502.134+283.136+517.233+283.136+532.74C283.136+595.364+308.536+652.062+349.606+693.071L368.904+668.432C334.987+633.25+314.045+585.474+314.045+532.74C314.045+521.475+315.129+510.47+316.958+499.727L287.748+487.509ZM732.895+494.468L702.876+502.681C704.393+512.494+705.384+522.5+705.384+532.74C705.384+588.308+682.106+638.361+644.901+673.975L665.291+697.157C708.912+655.862+736.252+597.548+736.252+532.74C736.252+519.679+735.016+506.923+732.895+494.468ZM400.015+694.77L380.96+719.084C417.531+744.4+461.849+759.298+509.694+759.299C555.342+759.299+597.763+745.708+633.33+722.483L612.616+698.896C582.685+717.472+547.509+728.39+509.694+728.389C469.046+728.389+431.298+715.984+400.015+694.77Z" opacity="1" fill="currentColor"/>
+                        </g>
+                        <g id="レイヤー 4" vectornator:layerName="レイヤー 4">
+                        <g opacity="1">
+                        <path d="M487.647+377.686L531.741+377.686L531.741+437.489L487.647+437.489L487.647+377.686Z" opacity="1" fill="currentColor"/>
+                        <path d="M383.955+408.445L635.433+408.445L635.433+451.73L383.955+451.73L383.955+408.445Z" opacity="1" fill="currentColor"/>
+                        <path d="M428.783+444.726L474.513+444.726L474.513+576.699L428.783+576.699L428.783+444.726Z" opacity="1" fill="currentColor"/>
+                        <path d="M546.547+443.183L592.277+443.183L592.277+575.156L546.547+575.156L546.547+443.183Z" opacity="1" fill="currentColor"/>
+                        <path d="M471.33+467.925L551.731+467.925L551.731+500.187L471.33+500.187L471.33+467.925Z" opacity="1" fill="currentColor"/>
+                        <path d="M469.151+521.482L549.553+521.482L549.553+553.744L469.151+553.744L469.151+521.482Z" opacity="1" fill="currentColor"/>
+                        <path d="M380.414+570.318L638.974+570.318L638.974+610.266L380.414+610.266L380.414+570.318Z" opacity="1" fill="currentColor"/>
+                        <path d="M380.414+599.404L425.437+599.404L425.437+688.32L380.414+688.32L380.414+599.404Z" opacity="1" fill="currentColor"/>
+                        <path d="M593.951+599.404L638.974+599.404L638.974+688.32L593.951+688.32L593.951+599.404Z" opacity="1" fill="currentColor"/>
+                        <path d="M440.989+621.242L440.989+688.684L578.259+688.684L578.259+621.242L440.989+621.242ZM475.499+646.811L543.709+646.811L543.709+663.156L475.499+663.156L475.499+646.811Z" opacity="1" fill="currentColor"/>
+                        </g>
+                        </g>
+                        </svg>
+                </span>
+                <span class="ml-2">
+                    Amataka Scholar 
+                    <span class="text-sm font-normal">-先輩の論文を検索しよう-</span>
+                </span>
+            </h1>
+            <div class="grid grid-cols-3 gap4">
+                <a href="./lp.html" class="hover:underline flex justify-center items-center" target="_blank" rel="noopener noreferrer">
+                    <span><svg class="fill-current" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><circle cx="12" cy="19" r="2"/><path d="M10 3h4v12h-4z"/></svg></span>
+                    使い方
+                </a>
+                <a href="https://sh.higo.ed.jp/amakusa/" class="hover:underline flex justify-center items-center" target="_blank" rel="noopener noreferrer">
+                    <span><svg class="fill-current" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="none"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z"/></svg></span>
+                    天草高校
+                </a>
+                <a href="https://www.jst.go.jp/cpse/ssh/" class="hover:underline flex justify-center items-center" target="_blank" rel="noopener noreferrer">
+                    <span><svg class="fill-current" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="none"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z"/></svg></span>
+                    SSH
+                </a>
+            </div>
+        </header>
+        <main class="w-full grid grid-cols-3" style="height: calc(100vh - 5rem);">
+            <!-- side bar container -->
+            <div class="py-1 overflow-hidden">
+                <div class="border-r border-purple-300 h-full overflow-y-scroll p-4 pb-0">
+                    <h2 class="text-2xl font-bold border-b-2 border-purple-300">検索</h2>
+                    <div class="mt-4 mb-16 grid grid-cols-4 lg:grid-cols-5 shadow-md">
+                        <input 
+                            id="search-word"
+                            type="search"
+                            placeholder="例:スクミリンゴガイ"
+                            class="col-span-3 lg:col-span-4 rounded-l-md focus:outline-none focus:ring focus:border-purple-300 w-full h-10 px-2"
+                        >
+                        <button 
+                            id="search-btn"
+                            class="bg-yellow-400 hover:bg-yellow-300 rounded-r-md disabled:opacity-50"
+                            onclick="HandleWordSearch()"
+                        >検索</button>
+                    </div>
+
+                    <h2 class="text-2xl font-bold border-b-2 border-purple-300">カテゴリー</h2>
+                    <div class="mt-4">
+                        <div id="category-list" class="h-full">
+                            <div class="flex justify-center items-center animate-pulse">
+                                <img src="src/refresh.svg" class="animate-spin w-8">
+                                ロード中
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- search result container -->
+            <div class="col-span-2 py-4 overflow-hidden">
+                <!-- before search -->
+                <div id="before-search" class="w-full h-full flex flex-col justify-center items-center text-purple-800">
+                    <div class="w-96 text-center">
+                        <img src="./src/before_search.png">
+                        <p class="text-left">
+                            先輩方の論文を探すことができます。左の検索ボックスか、カテゴリーから探してみてください。
+                        </p>
+                    </div>
+                </div>
+                <!-- searching -->
+                <div id="searching" class="hidden w-full h-full flex flex-col justify-center items-center text-purple-800">
+                    <div class="w-96 text-center">
+                        <img src="./src/searching.png">
+                        <p class="flex justify-center items-center">
+                            <span>
+                                <svg class="animate-spin fill-current" xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 0 24 24" width="36px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M17.65 6.35c-1.63-1.63-3.94-2.57-6.48-2.31-3.67.37-6.69 3.35-7.1 7.02C3.52 15.91 7.27 20 12 20c3.19 0 5.93-1.87 7.21-4.56.32-.67-.16-1.44-.9-1.44-.37 0-.72.2-.88.53-1.13 2.43-3.84 3.97-6.8 3.31-2.22-.49-4.01-2.3-4.48-4.52C5.31 9.44 8.26 6 12 6c1.66 0 3.14.69 4.22 1.78l-1.51 1.51c-.63.63-.19 1.71.7 1.71H19c.55 0 1-.45 1-1V6.41c0-.89-1.08-1.34-1.71-.71l-.64.65z"/></svg>
+                            </span>
+                            ただ今、検索しています。
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- search fail -->
+                <div id="search-fail" class="hidden w-full h-full flex flex-col justify-center items-center text-purple-800">
+                    <div class="w-96 text-center">
+                        <img src="./src/search_fail.png">
+                        <p class="flex justify-center items-center">
+                            「<span class="show-search-word"></span>」に該当する論文は見つかりませんでした。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- search result -->
+                <div id="search-result" class="hidden w-full h-full overflow-y-scroll p-4">
+                    <h2 class="text-2xl font-black text-purple-800 mb-8">「<span class="show-search-word"></span>」の検索結果</h2>
+                    <ul id="paper-list">
+                        
+                    </ul>
+                </div>
+            </div>
+        </main>
+        <footer class="bg-purple-600 w-full flex items-center justify-center h-8 px-2 text-white">
+            <p>&copy; 2021 熊本県立天草高等学校　SSH研究部</p>
+        </footer>
+    </div>
+
+    <script src="./js/utils.js"></script>
+    <script src="./js/search.js"></script>
+    <script src="./js/category.js"></script>
+    <script>
+        window.addEventListener("load", async function () {
+            const ctgry = await getCategories();
+            updateCategory(ctgry);
+        })
+    </script>
+</body>
+</html>
